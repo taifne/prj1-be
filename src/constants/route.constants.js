@@ -13,6 +13,11 @@ const Routes = {
     ALL: '/',
     DETAIL: '/:id',
   },
+  GROUP_USER: {
+    DEFAULT: '/groups',
+    ALL: '/',
+    DETAIL: '/:id',
+  },
   HEALTH: '/health',
 };
 

@@ -1,6 +1,6 @@
 /* eslint-disable func-names */
 const { Schema, model } = require('mongoose');
-const { UserRoles } = require('../constants');
+const { UserRoles,UserPermissions,UserStatus,DefaltImages } = require('../constants');
 
 const { bcryptService } = require('../services');
 const { toInteger } = require('../shared');
@@ -17,6 +17,10 @@ const userSchema = new Schema(
       required: [true, 'LastName is Required'],
       trim: true,
     },
+    fullName: {
+      type: String,
+      trim: true
+    },
     email: {
       type: String,
       required: [true, 'Email is Required'],
@@ -29,22 +33,36 @@ const userSchema = new Schema(
       minlength: 8,
       select: false,
     },
-    photo: {
+    avatar: {
       type: String,
-      default: null,
+      default: DefaltImages.USERAVATAR,
     },
     isVerified: {
       type: Boolean,
       default: false,
     },
-    isActive: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      enum: [UserStatus.ACTIVE, UserStatus.DEACTIVATED, UserStatus.PENDDING],
+      default: UserStatus.ACTIVE,
     },
     role: {
       type: String,
       enum: [UserRoles.ADMIN, UserRoles.USER],
       default: UserRoles.USER,
+    },
+    permissions: {
+      type: Array,
+      default: [UserPermissions.READ],
+      items: {
+        type: String,
+        enum: [
+          UserPermissions.CREATEPOST,
+          UserPermissions.DELETE,
+          UserPermissions.WRITE,
+          UserPermissions.READ
+        ]
+      }
     },
     passwordChangedAt: Date,
     resetPasswordToken: String,
@@ -95,5 +113,11 @@ userSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = resetPasswordExpire;
   return resetToken;
 };
+userSchema.pre('save', function (next) {
+  if (this.isModified('firstName') || this.isModified('lastName')) {
+    this.fullName = `${this.firstName} ${this.lastName}`;
+  }
+  return next();
+});
 
 module.exports = model('User', userSchema);

@@ -3,6 +3,7 @@ const usersRouter = require('express').Router();
 const {
   Routes: { USER },
   UserRoles: { ADMIN },
+  UserPermissions
 } = require('../constants');
 const {
   usersController: {
@@ -12,14 +13,14 @@ const {
     deleteUserHandler,
   },
 } = require('../controller');
-const { verifyToken, restrictTo } = require('../middleware');
+const { verifyToken, restrictTo,permissionTo} = require('../middleware');
 const {
   multerService: { uploadUserPhoto, resizeUserPhoto },
 } = require('../services');
 
 usersRouter
   .route(USER.ALL)
-  .get(verifyToken, restrictTo(ADMIN), getAllUserHandler);
+  .get(verifyToken, permissionTo(UserPermissions.WRITE), getAllUserHandler);
 usersRouter
   .route(USER.DETAIL)
   .get(verifyToken, restrictTo(ADMIN), getUserByIdHandler)

@@ -18,7 +18,7 @@ exports.getAllUserHandler = asyncHandler(async (req, res, _) => {
   query.page = +query.page || 1;
   query.limit = +query.limit || 10;
   query.sort = 'createdAt';
-  query.fields = 'firstName,lastName,email,photo,role,createdAt,updatedAt';
+  query.fields = 'avatar,fullName,email,role,role,createdAt,permissions,status';
   const features = new queryService.APIFeatures(User.find(), query || {})
     .filter()
     .sort()
@@ -106,7 +106,7 @@ exports.deleteUserHandler = asyncHandler(async (req, res, _) => {
   );
   return res.status(HttpStatus.OK).json({
     statusCode: HttpStatus.OK,
-    message: 'Fetch user Successfully!',
+    message: 'Delete user Successfully!',
     data: user,
   });
 });
