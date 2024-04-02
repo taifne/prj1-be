@@ -7,7 +7,9 @@ const notificationsController = require('./notifications.controller');
 const questionsController = require('./questions.controller');
 const recruitmentController = require('./recruitments.controller');
 const studyPostsController = require('./study-posts.controller');
+const permissionController=require("./permission.controller")
 module.exports = {
+    permissionController,
     authController,
     usersController,
     answersController,

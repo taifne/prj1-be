@@ -57,10 +57,18 @@ const userSchema = new Schema(
       items: {
         type: String,
         enum: [
-          UserPermissions.CREATEPOST,
-          UserPermissions.DELETE,
-          UserPermissions.WRITE,
-          UserPermissions.READ
+          UserPermissions.READ_POST,
+          UserPermissions.UPDATE_POST,
+          UserPermissions.DELETE_POST,
+          UserPermissions.WRITE_POST,
+          UserPermissions.READ_USER,
+          UserPermissions.UPDATE_USER,
+          UserPermissions.WRITE_USER,
+          UserPermissions.DELETE_USER,
+          UserPermissions.READ_GROUP,
+          UserPermissions.UPDATE_GROUP,
+          UserPermissions.WRITE_GROUP,
+          UserPermissions.DELETE_GROUP,
         ]
       }
     },

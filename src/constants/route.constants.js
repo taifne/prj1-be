@@ -13,10 +13,20 @@ const Routes = {
     ALL: '/',
     DETAIL: '/:id',
   },
+  STUDY_POST:{
+    DEFAULT:"/studys",
+    ALL:"/",
+    DETAIL:"/:id",
+    CREATE:"/create",
+  },
   GROUP_USER: {
     DEFAULT: '/groups',
     ALL: '/',
     DETAIL: '/:id',
+  },
+  PERMISSION:{
+DEFAULT:'/permissions',
+    ALL:'/'
   },
   HEALTH: '/health',
 };
