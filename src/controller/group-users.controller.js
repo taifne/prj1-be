@@ -1,7 +1,7 @@
 const { HttpStatus } = require('../constants');
 const { NotFoundException } = require('../errors');
 const { asyncHandler } = require('../middleware');
-const { GroupUser } = require('../models');
+const { UserGroup } = require('../models');
 const { logger } = require('../shared');
 
 /**
@@ -12,9 +12,10 @@ const { logger } = require('../shared');
   @role   Admin
 */
 exports.createGroupUserHandler = asyncHandler(async (req, res, _) => {
-  const { createdBy, name, users, permissions } = req.body;
+  const { name, users, permissions } = req.body;
+  const createdBy = req.user._id; // Assuming you have user information in the request
 
-  const groupUser = await GroupUser.create({ createdBy, name, users, permissions });
+  const groupUser = await UserGroup.create({ createdBy, name, users, permissions });
 
   logger.info(
     `${HttpStatus.CREATED} - ${req.originalUrl} [${req.method}] - 'Group user created successfully!' `,
@@ -34,7 +35,7 @@ exports.createGroupUserHandler = asyncHandler(async (req, res, _) => {
   @role   Admin
 */
 exports.getAllGroupUsersHandler = asyncHandler(async (req, res, _) => {
-  const groupUsers = await GroupUser.find();
+  const groupUsers = await UserGroup.find();
 
   logger.info(
     `${HttpStatus.OK} - ${req.originalUrl} [${req.method}] - 'Fetch group users successfully!' `,
@@ -55,7 +56,7 @@ exports.getAllGroupUsersHandler = asyncHandler(async (req, res, _) => {
   @role   Admin
 */
 exports.getGroupUserByIdHandler = asyncHandler(async (req, res, _) => {
-  const groupUser = await GroupUser.findById(req.params.id);
+  const groupUser = await UserGroup.findById(req.params.id);
 
   if (!groupUser) {
     throw new NotFoundException('Group user not found!');
@@ -80,9 +81,10 @@ exports.getGroupUserByIdHandler = asyncHandler(async (req, res, _) => {
   @role   Admin
 */
 exports.updateGroupUserHandler = asyncHandler(async (req, res, _) => {
-  const { createdBy, name, users, permissions } = req.body;
+  const {  name, users, permissions } = req.body;
+  const createdBy = req.user._id; // Assuming you have user information in the request
 
-  const groupUser = await GroupUser.findById(req.params.id);
+  const groupUser = await UserGroup.findById(req.params.id);
 
   if (!groupUser) {
     throw new NotFoundException('Group user not found!');
@@ -114,13 +116,13 @@ exports.updateGroupUserHandler = asyncHandler(async (req, res, _) => {
   @role   Admin
 */
 exports.deleteGroupUserHandler = asyncHandler(async (req, res, _) => {
-  const groupUser = await GroupUser.findById(req.params.id);
+  const groupUser = await UserGroup.findById(req.params.id);
 
   if (!groupUser) {
     throw new NotFoundException('Group user not found!');
   }
 
-  await GroupUser.findByIdAndDelete(req.params.id);
+  await UserGroup.findByIdAndDelete(req.params.id);
 
   logger.info(
     `${HttpStatus.OK} - ${req.originalUrl} [${req.method}] - 'Deleted group user successfully!' `,

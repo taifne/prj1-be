@@ -27,7 +27,7 @@ groupUserRouter
     ;
 
  groupUserRouter.route(GROUP_USER.DETAIL)
-    .get(verifyToken,permissionTo(UserPermissions.READ_GROUP), getGroupUserByIdHandler)
-.post(verifyToken,permissionTo(UserPermissions.WRITE_GROUP), updateGroupUserHandler)
+.get(verifyToken,permissionTo(UserPermissions.READ_GROUP), getGroupUserByIdHandler)
+.put(verifyToken,permissionTo(UserPermissions.WRITE_GROUP), updateGroupUserHandler)
 .delete(verifyToken,permissionTo(UserPermissions.DELETE_GROUP) ,deleteGroupUserHandler)
-module.exports = { studyPostRouter };
+module.exports = { groupUserRouter };

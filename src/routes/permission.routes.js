@@ -20,6 +20,6 @@ const {
 permissionRouter
     .route(PERMISSION.ALL)
     .get(verifyToken, permissionTo(UserPermissions.READ_POST), getAllPermissionsHandler)
-    .post(verifyToken,createPermissionHandler);
+    .post(verifyToken,permissionTo(UserPermissions.WRITE_POST),createPermissionHandler);
 
 module.exports = { permissionRouter };

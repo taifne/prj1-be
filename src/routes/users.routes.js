@@ -1,5 +1,4 @@
 const usersRouter = require('express').Router();
-
 const {
   Routes: { USER },
   UserRoles: { ADMIN },
@@ -13,24 +12,21 @@ const {
     deleteUserHandler,
   },
 } = require('../controller');
-const { verifyToken, restrictTo,permissionTo} = require('../middleware');
+const { verifyToken, restrictTo, permissionTo } = require('../middleware');
 const {
   multerService: { uploadUserPhoto, resizeUserPhoto },
 } = require('../services');
 
-usersRouter
-  .route(USER.ALL)
-  .get(verifyToken, permissionTo(UserPermissions.WRITE), getAllUserHandler);
-usersRouter
-  .route(USER.DETAIL)
-  .get(verifyToken, restrictTo(ADMIN), getUserByIdHandler)
-  .put(
-    verifyToken,
-    restrictTo(ADMIN),
-    uploadUserPhoto,
-    resizeUserPhoto,
-    updateUserHandler,
-  )
-  .delete(verifyToken, restrictTo(ADMIN), deleteUserHandler);
+// Middleware for all routes
+usersRouter.use(verifyToken);
+
+// Routes for getting all users
+usersRouter.get(USER.ALL, permissionTo(UserPermissions.READ_USER), getAllUserHandler);
+
+// Routes for getting, updating, and deleting a user by ID (admin only)
+usersRouter.route(USER.DETAIL)
+  .get(restrictTo(ADMIN), permissionTo(UserPermissions.READ_USER), getUserByIdHandler)
+  .put(restrictTo(ADMIN), uploadUserPhoto, resizeUserPhoto, updateUserHandler)
+  .delete(restrictTo(ADMIN), deleteUserHandler);
 
 module.exports = { usersRouter };

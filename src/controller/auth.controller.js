@@ -47,29 +47,54 @@ exports.signupHandler = asyncHandler(async (req, res, _) => {
 exports.loginHandler = asyncHandler(async (req, res, _) => {
   const { email, password } = req.body;
 
-  // Check for user
-  const user = await User.findOne({ email }).select('+password');
+  try {
+    // Check for user
+    const user = await User.findOne({ email }).select('+password');
 
-  if (!user) {
-    throw new UnauthorizedException('Invalid credentials');
+    if (!user) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: 'Invalid credentials',
+      });
+    }
+
+    // Check current password
+    if (!(await user.matchPassword(password))) {
+      return res.status(HttpStatus.UNAUTHORIZED).json({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: 'Invalid credentials',
+      });
+    }
+
+    // Create token
+    const token = jwtService.signToken(user._id);
+
+    // Construct username from first name and last name
+    const username = `${user.firstName} ${user.lastName}`;
+
+    // Send user information along with the token
+    const responseData = {
+      accessToken:token,
+      statusCode: HttpStatus.OK,
+      message: 'Login successfully!',
+      username: username,
+      email: user.email
+    };
+
+    res.setHeader('token', token);
+    res.cookie('token', token, jwtService.getCookieOptions(req));
+
+    return res.status(HttpStatus.OK).json(responseData);
+  } catch (error) {
+    // Handle any unexpected errors
+    console.error('Error during login:', error);
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'Internal server error',
+    });
   }
-
-  // Check current password
-  if (!(await user.matchPassword(password))) {
-    throw new UnauthorizedException('Invalid credentials');
-  }
-
-  // Create token
-  const token = jwtService.signToken(user._id);
-
-  res.setHeader('token', token);
-  res.cookie('token', token, jwtService.getCookieOptions(req));
-
-  return res.status(HttpStatus.OK).json({
-    statusCode: HttpStatus.OK,
-    message: 'Login successfully!',
-  });
 });
+
 
 /**
   @desc   Get current logged in user

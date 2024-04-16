@@ -2,7 +2,6 @@ const studyPostRouter = require('express').Router();
 
 const {
     Routes: { STUDY_POST },
-    UserRoles: { ADMIN },
     UserPermissions
 } = require('../constants');
 const {
@@ -15,17 +14,16 @@ const {
     },
 } = require('../controller');
 const { verifyToken, restrictTo, permissionTo } = require('../middleware');
-const { StudyPost } = require('../models');
 const {
     multerService: { uploadUserPhoto, resizeUserPhoto },
 } = require('../services');
 
 studyPostRouter
     .route(STUDY_POST.ALL)
-    .get(verifyToken, permissionTo(UserPermissions.WRITE), getAllStudyPosts);
+    .get(verifyToken, permissionTo(UserPermissions.READ_POST), getAllStudyPosts);
 
-studyPostRouter.route(STUDY_POST.CREATE).post(verifyToken, createStudyPost)
-studyPostRouter.route(STUDY_POST.DETAIL).get(verifyToken, getStudyPostById)
-.post(verifyToken, updateStudyPost)
-.delete(verifyToken, deleteStudyPost)
+studyPostRouter.route(STUDY_POST.CREATE).post(verifyToken,permissionTo(UserPermissions.WRITE_POST), createStudyPost)
+studyPostRouter.route(STUDY_POST.DETAIL).get(verifyToken,permissionTo(UserPermissions.READ_POST), getStudyPostById)
+.post(verifyToken, permissionTo(UserPermissions.UPDATE_POST),updateStudyPost)
+.delete(verifyToken, permissionTo(UserPermissions.DELETE_POST),deleteStudyPost)
 module.exports = { studyPostRouter };
