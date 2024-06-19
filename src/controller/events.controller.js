@@ -2,6 +2,7 @@ const { HttpStatus } = require('../constants');
 const { NotFoundException } = require('../errors');
 const { asyncHandler } = require('../middleware');
 const { Event } = require('../models');
+const event = require('../models/event');
 const { logger } = require('../shared');
 
 /**
@@ -11,7 +12,7 @@ const { logger } = require('../shared');
  * @access Private (example: only authenticated users can create)
  */
 exports.createEvent = asyncHandler(async (req, res) => {
-  const { title, description, location, start, end } = req.body;
+  const { title, description, location, start, end ,group} = req.body;
 
   const event = await Event.create({
     title,
@@ -19,6 +20,7 @@ exports.createEvent = asyncHandler(async (req, res) => {
     location,
     start,
     end,
+    group
   });
 
   logger.info(
@@ -131,3 +133,21 @@ exports.deleteEvent = asyncHandler(async (req, res) => {
     data: event,
   });
 });
+ exports.getEventByGroup=asyncHandler(async (req, res) => {
+  try {
+    const { groupIds } = req.body;
+
+
+
+    // Find events that include any of the groupIds
+    const events = await event.find({ group: { $in: groupIds } }).distinct('_id');
+
+    // Populate the events with their full details
+    const fullEvents = await event.find({ _id: { $in: events } }).populate('group');
+
+    return res.status(200).json({ events: fullEvents });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+ })

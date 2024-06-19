@@ -8,6 +8,7 @@ const questionsController = require('./questions.controller');
 const recruitmentController = require('./recruitments.controller');
 const studyPostsController = require('./study-posts.controller');
 const permissionController=require("./permission.controller")
+const commentsController = require("./comment.controller");
 module.exports = {
     permissionController,
     authController,
@@ -18,5 +19,6 @@ module.exports = {
     notificationsController,
     questionsController,
     recruitmentController,
-    studyPostsController
+    studyPostsController,
+    commentsController,
 };

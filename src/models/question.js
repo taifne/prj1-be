@@ -24,13 +24,7 @@ const questionSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-    },
-    answers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Answer',
-      }
-    ]
+    }
   },
   { timestamps: true },
 );

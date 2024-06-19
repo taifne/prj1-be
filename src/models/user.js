@@ -1,12 +1,17 @@
 /* eslint-disable func-names */
 const { Schema, model } = require('mongoose');
-const { UserRoles,UserPermissions,UserStatus,DefaltImages } = require('../constants');
+const { UserRoles, UserPermissions, UserStatus, DefaltImages } = require('../constants');
 
 const { bcryptService } = require('../services');
 const { toInteger } = require('../shared');
 
 const userSchema = new Schema(
   {
+    group: [{
+      type: Schema.Types.ObjectId,
+      ref: 'GroupUser',
+      default: null
+    }],
     firstName: {
       type: String,
       required: [true, 'FirstName is Required'],

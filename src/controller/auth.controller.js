@@ -21,13 +21,13 @@ const config = require('../config');
 exports.signupHandler = asyncHandler(async (req, res, _) => {
   const { email, firstName, lastName, password } = req.body;
   const user = await User.findOne({ email });
-
+  const permissions = [];
   if (user) {
     throw new BadRequestException('Email is already taken');
   }
 
   // Create user
-  await User.create({ firstName, lastName, email, password });
+  await User.create({ firstName, lastName, email, password, permissions });
 
   logger.info(
     `${HttpStatus.CREATED} - ${req.originalUrl} [${req.method}] - 'Signup successfully!' `,
@@ -74,11 +74,14 @@ exports.loginHandler = asyncHandler(async (req, res, _) => {
 
     // Send user information along with the token
     const responseData = {
-      accessToken:token,
+      accessToken: token,
       statusCode: HttpStatus.OK,
       message: 'Login successfully!',
+      id: user._id,
       username: username,
-      email: user.email
+      email: user.email,
+      permissions: user.permissions,
+      group: user.group
     };
 
     res.setHeader('token', token);

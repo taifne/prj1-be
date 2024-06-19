@@ -3,11 +3,11 @@ const { Schema, model } = require('mongoose');
 
 const eventSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    group: [{
+      type: Schema.Types.ObjectId,
+      ref: 'GroupUser',
+      required: true
+    }],
     title: {
       type: String,
       required: true,

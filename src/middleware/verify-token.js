@@ -29,7 +29,14 @@ const verifyToken = asyncHandler(async (req, res, next) => {
   }
 
   // 3) Check if user still exists
-  const currentUser = await User.findById(decoded?.id);
+  const currentUser = await User.findById(decoded?.id).populate({
+    path: 'group',
+    populate: {
+      path: 'users',
+      model: 'User',
+      select: 'avatar' 
+    }
+  });
   if (!currentUser) {
     return next(
       new UnauthorizedException(ErrorMessage.USER_WITH_TOKEN_NOT_EXIST),

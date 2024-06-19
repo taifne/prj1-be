@@ -6,6 +6,6 @@ const StudyPost = require('./study-post');
 const Recruitment = require('./recruitment');
 const Question = require('./question');
 const Notification = require('./notification');
+const Comment = require('./comment');
 
-
-module.exports = { User, Answer, StudyPost, UserGroup, Event, Recruitment, Question, Notification };
+module.exports = { User, Answer, StudyPost, UserGroup, Event, Recruitment, Question, Notification ,Comment };

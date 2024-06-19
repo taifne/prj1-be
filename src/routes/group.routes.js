@@ -11,7 +11,8 @@ const {
         getGroupUserByIdHandler,
         createGroupUserHandler,
         updateGroupUserHandler,
-        deleteGroupUserHandler
+        deleteGroupUserHandler,
+        addUserToGroup,removeUser
     },
 } = require('../controller');
 const { verifyToken, restrictTo, permissionTo } = require('../middleware');
@@ -23,11 +24,13 @@ const {
 groupUserRouter
     .route(GROUP_USER.ALL)
     .get(verifyToken, permissionTo(UserPermissions.READ_GROUP), getAllGroupUsersHandler)
-    .post(verifyToken,permissionTo(UserPermissions.WRITE_GROUP),createGroupUserHandler)
+    .post(verifyToken, permissionTo(UserPermissions.WRITE_GROUP), createGroupUserHandler)
     ;
+groupUserRouter.route(GROUP_USER.ADDUSER).post(verifyToken, addUserToGroup)
+groupUserRouter.route(GROUP_USER.REMOVEUSER).post(verifyToken, removeUser)
+groupUserRouter.route(GROUP_USER.DETAIL)
+    .get(verifyToken, permissionTo(UserPermissions.READ_GROUP), getGroupUserByIdHandler)
+    .put(verifyToken, permissionTo(UserPermissions.WRITE_GROUP), updateGroupUserHandler)
+    .delete(verifyToken, permissionTo(UserPermissions.DELETE_GROUP), deleteGroupUserHandler)
 
- groupUserRouter.route(GROUP_USER.DETAIL)
-.get(verifyToken,permissionTo(UserPermissions.READ_GROUP), getGroupUserByIdHandler)
-.put(verifyToken,permissionTo(UserPermissions.WRITE_GROUP), updateGroupUserHandler)
-.delete(verifyToken,permissionTo(UserPermissions.DELETE_GROUP) ,deleteGroupUserHandler)
 module.exports = { groupUserRouter };

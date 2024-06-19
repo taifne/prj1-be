@@ -8,6 +8,32 @@ const Routes = {
     FORGOT_PASSWORD: '/forgotPassword',
     RESET_PASSWORD: '/resetPassword/:resetToken',
   },
+  COMMENT: {
+    DEFAULT: '/comments',
+    ALL:'/',
+    DETAIL:'/:id',
+    ALLFORQUESTION:'/question/:id',
+    CREATE:'/create',
+    UPDATE:'/update/:id',
+    DELETE:'/delete/:id',
+  },
+  EVENT: {
+    DEFAULT: '/events',
+    ALL:'/',
+    DETAIL:'/:id',
+    CREATE:'/create',
+    UPDATE:'/update/:id',
+    DELETE:'/delete/:id',
+    GETBYGROUP:'/groups'
+  },
+  QUESTION: {
+    DEFAULT: '/questions',
+    ALL:'/',
+    DETAIL:'/:id',
+    CREATE:'/create',
+    UPDATE:'/update/:id',
+    DELETE:'/delete/:id',
+  },
   USER: {
     DEFAULT: '/users',
     ALL: '/',
@@ -23,6 +49,8 @@ const Routes = {
     DEFAULT: '/groups',
     ALL: '/',
     DETAIL: '/:id',
+    ADDUSER:'/adduser',
+    REMOVEUSER:'/removeuser',
   },
   PERMISSION:{
 DEFAULT:'/permissions',

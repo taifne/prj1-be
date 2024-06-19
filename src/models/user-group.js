@@ -13,6 +13,11 @@ const groupUserSchema = new Schema(
       required: true,
       trim: true,
     },
+    color: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     users: [
       {
         type: Schema.Types.ObjectId,

@@ -42,7 +42,10 @@ exports.createStudyPost = asyncHandler(async (req, res) => {
  * @access Public
  */
 exports.getAllStudyPosts = asyncHandler(async (req, res) => {
-  const studyPosts = await StudyPost.find();
+  const studyPosts = await StudyPost.find().populate({
+    path: 'createdBy',
+    select: 'fullName status avatar' // Only retrieve the 'name' field from the User document
+  }).lean();
 
   logger.info(
     `${HttpStatus.OK} - ${req.originalUrl} [${req.method}] - 'Fetched all study posts successfully!'`

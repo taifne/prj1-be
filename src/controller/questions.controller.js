@@ -12,7 +12,7 @@ const { logger } = require('../shared');
  */
 exports.createQuestion = asyncHandler(async (req, res) => {
   const { title, body } = req.body;
-  const userId = req.user._id; // Assuming user information is available in the request
+  const userId = req.user._id; 
 
   const question = await Question.create({
     title,
@@ -38,7 +38,7 @@ exports.createQuestion = asyncHandler(async (req, res) => {
  * @access Public
  */
 exports.getAllQuestions = asyncHandler(async (req, res) => {
-  const questions = await Question.find();
+  const questions = await Question.find().populate("user");
 
   logger.info(
     `${HttpStatus.OK} - ${req.originalUrl} [${req.method}] - 'Fetched all questions successfully!'`
